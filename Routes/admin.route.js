@@ -10,8 +10,9 @@ const adminRouter = express.Router();
 adminRouter.post("/register", async(req,res) => {
     try{
       const {name, email, password, mobile} = req.body;
-      const existingAdmin = await adminModel.findOne({email}) || adminModel.findOne({mobile});
-      if(existingAdmin){
+      const existingAdmin = await adminModel.findOne({email});
+      const existingNumber = await adminModel.findOne({mobile});
+      if(existingAdmin || existingNumber){
         res.status(400).json({msg: "Admin already registered, please Login!!"});
       }else{
         bcrypt.hash(password, 5, async(err, hash) => {
